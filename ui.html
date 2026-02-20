@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --amp-bg: #0f0f14;
+    --amp-surface: #1a1a24;
+    --amp-surface-hover: #22222e;
+    --amp-border: #2a2a3a;
+    --amp-border-focus: #6b5ce7;
+    --amp-text: #e8e8ef;
+    --amp-text-secondary: #8888a0;
+    --amp-text-muted: #5a5a72;
+    --amp-primary: #6b5ce7;
+    --amp-primary-hover: #7d70ed;
+    --amp-primary-text: #ffffff;
+    --amp-danger: #e05252;
+    --amp-success: #3eca7e;
+    --amp-warning: #e8a543;
+    --amp-radius: 8px;
+    --amp-radius-sm: 6px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--amp-bg);
+    color: var(--amp-text);
+    font-size: 13px;
+    line-height: 1.5;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .plugin-container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* Header */
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--amp-border);
+  }
+  .header-logo {
+    width: 28px;
+    height: 28px;
+    background: var(--amp-primary);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .header-text h1 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--amp-text);
+  }
+  .header-text p {
+    font-size: 11px;
+    color: var(--amp-text-secondary);
+  }
+
+  /* Section styling */
+  .section {
+    background: var(--amp-surface);
+    border: 1px solid var(--amp-border);
+    border-radius: var(--amp-radius);
+    padding: 14px;
+  }
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--amp-text-secondary);
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .section-label .badge {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--amp-primary);
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .optional-tag {
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--amp-text-muted);
+  }
+
+  /* Inputs */
+  input[type="text"],
+  input[type="password"],
+  textarea {
+    width: 100%;
+    background: var(--amp-bg);
+    border: 1px solid var(--amp-border);
+    border-radius: var(--amp-radius-sm);
+    padding: 8px 12px;
+    color: var(--amp-text);
+    font-family: inherit;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  input:focus, textarea:focus {
+    border-color: var(--amp-border-focus);
+  }
+  textarea {
+    resize: vertical;
+    min-height: 60px;
+  }
+  .input-hint {
+    font-size: 11px;
+    color: var(--amp-text-muted);
+    margin-top: 4px;
+  }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: var(--amp-radius-sm);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid var(--amp-border);
+    background: var(--amp-surface);
+    color: var(--amp-text);
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .btn:hover { background: var(--amp-surface-hover); }
+  .btn-primary {
+    background: var(--amp-primary);
+    border-color: var(--amp-primary);
+    color: var(--amp-primary-text);
+    font-weight: 600;
+    font-size: 14px;
+    padding: 12px 20px;
+    width: 100%;
+  }
+  .btn-primary:hover { background: var(--amp-primary-hover); border-color: var(--amp-primary-hover); }
+  .btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .btn-primary:disabled:hover {
+    background: var(--amp-primary);
+    border-color: var(--amp-primary);
+  }
+  .btn-row {
+    display: flex;
+    gap: 8px;
+  }
+  .btn-row .btn { flex: 1; }
+  .btn-full { width: 100%; }
+  .btn-sm {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+
+  /* Thumbnail grid */
+  .thumb-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+    min-height: 0;
+  }
+  .thumb-item {
+    position: relative;
+    width: 64px;
+    height: 64px;
+    border-radius: var(--amp-radius-sm);
+    overflow: hidden;
+    border: 1px solid var(--amp-border);
+    flex-shrink: 0;
+  }
+  .thumb-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .thumb-remove {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.7);
+    color: #fff;
+    font-size: 12px;
+    line-height: 18px;
+    text-align: center;
+    cursor: pointer;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .thumb-remove:hover { background: var(--amp-danger); }
+
+  /* Multi-select dropdown */
+  .dropdown-wrapper {
+    position: relative;
+  }
+  .dropdown-trigger {
+    width: 100%;
+    background: var(--amp-bg);
+    border: 1px solid var(--amp-border);
+    border-radius: var(--amp-radius-sm);
+    padding: 8px 12px;
+    color: var(--amp-text);
+    font-family: inherit;
+    font-size: 13px;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 38px;
+  }
+  .dropdown-trigger:hover { border-color: var(--amp-border-focus); }
+  .dropdown-trigger .arrow {
+    font-size: 10px;
+    color: var(--amp-text-muted);
+    transition: transform 0.15s;
+  }
+  .dropdown-trigger.open .arrow { transform: rotate(180deg); }
+  .dropdown-panel {
+    display: none;
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: var(--amp-surface);
+    border: 1px solid var(--amp-border);
+    border-radius: var(--amp-radius-sm);
+    padding: 6px;
+    z-index: 100;
+    max-height: 240px;
+    overflow-y: auto;
+  }
+  .dropdown-panel.open { display: block; }
+  .dropdown-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+  .dropdown-option:hover { background: var(--amp-surface-hover); }
+  .dropdown-option input[type="checkbox"] {
+    accent-color: var(--amp-primary);
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+  }
+  .dropdown-option label {
+    cursor: pointer;
+    flex: 1;
+    font-size: 12px;
+  }
+  .dropdown-option .size-dim {
+    font-size: 11px;
+    color: var(--amp-text-muted);
+    white-space: nowrap;
+  }
+
+  /* Collapsible sections */
+  .collapsible-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    color: var(--amp-text-secondary);
+    padding: 4px 0;
+  }
+  .collapsible-header:hover { color: var(--amp-text); }
+  .collapsible-header .chevron {
+    font-size: 10px;
+    transition: transform 0.15s;
+  }
+  .collapsible-header.open .chevron { transform: rotate(90deg); }
+  .collapsible-body {
+    display: none;
+    margin-top: 8px;
+  }
+  .collapsible-body.open { display: block; }
+
+  /* Status area */
+  .status-area {
+    padding: 12px;
+    border-radius: var(--amp-radius);
+    font-size: 12px;
+    display: none;
+  }
+  .status-area.visible { display: block; }
+  .status-generating {
+    background: rgba(107, 92, 231, 0.1);
+    border: 1px solid rgba(107, 92, 231, 0.3);
+    color: var(--amp-text);
+  }
+  .status-success {
+    background: rgba(62, 202, 126, 0.1);
+    border: 1px solid rgba(62, 202, 126, 0.3);
+    color: var(--amp-success);
+  }
+  .status-error {
+    background: rgba(224, 82, 82, 0.1);
+    border: 1px solid rgba(224, 82, 82, 0.3);
+    color: var(--amp-danger);
+  }
+  .status-area .status-msg { margin-bottom: 8px; }
+  .status-area .btn-row { margin-top: 8px; }
+
+  /* Spinner */
+  .spinner {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid var(--amp-border);
+    border-top-color: var(--amp-primary);
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    vertical-align: middle;
+    margin-right: 6px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Session history */
+  .history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-height: 150px;
+    overflow-y: auto;
+  }
+  .history-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    background: var(--amp-bg);
+    border: 1px solid var(--amp-border);
+  }
+  .history-item .hi-name { color: var(--amp-text); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .history-item .hi-time { color: var(--amp-text-muted); margin: 0 8px; white-space: nowrap; }
+  .history-status-ok { color: var(--amp-success); }
+  .history-status-fail { color: var(--amp-danger); }
+
+  .empty-state {
+    color: var(--amp-text-muted);
+    font-size: 12px;
+    text-align: center;
+    padding: 12px;
+    border: 1px dashed var(--amp-border);
+    border-radius: var(--amp-radius-sm);
+  }
+
+  .file-input-hidden { display: none; }
+
+  .char-counter {
+    font-size: 11px;
+    color: var(--amp-text-muted);
+    text-align: right;
+    margin-top: 2px;
+  }
+  .char-counter.over { color: var(--amp-danger); }
+</style>
+</head>
+<body>
+
+<div class="plugin-container">
+  <!-- Header -->
+  <div class="header">
+    <div class="header-logo">A</div>
+    <div class="header-text">
+      <h1>Amplitude Image Gen</h1>
+      <p>Generate branded illustrations with Gemini AI</p>
+    </div>
+  </div>
+
+  <!-- API Key -->
+  <div>
+    <div class="section-label">Gemini API Key</div>
+    <input type="password" id="apiKeyInput" placeholder="Enter your Google AI Studio API key" autocomplete="off" />
+    <div class="input-hint">Stored locally in this session only. Cleared when plugin closes.</div>
+  </div>
+
+  <!-- Reference Designs -->
+  <div class="section">
+    <div class="section-label">
+      Reference Designs
+      <span class="badge" id="refCount"></span>
+    </div>
+    <div class="thumb-grid" id="refThumbs"></div>
+    <div class="empty-state" id="refEmpty">Upload images or grab frames from your Figma selection</div>
+    <input type="file" class="file-input-hidden" id="refFileInput" accept="image/png,image/jpeg,image/jpg" multiple />
+    <div class="btn-row">
+      <button class="btn" id="refUploadBtn">Upload Files</button>
+      <button class="btn" id="refSelectionBtn">Use Figma Selection</button>
+    </div>
+  </div>
+
+  <!-- Brand Guidelines -->
+  <div class="section">
+    <div class="section-label">
+      Brand Guidelines <span class="optional-tag">(Optional)</span>
+      <span class="badge" id="brandCount"></span>
+    </div>
+    <div class="thumb-grid" id="brandThumbs"></div>
+    <div class="empty-state" id="brandEmpty">Upload screenshots of brand rules, color palettes, or design tokens</div>
+    <input type="file" class="file-input-hidden" id="brandFileInput" accept="image/png,image/jpeg,image/jpg" multiple />
+    <button class="btn btn-full" id="brandUploadBtn" style="margin-bottom: 10px;">Upload Images</button>
+    <textarea id="brandNotes" placeholder="Additional notes — paste extra brand rules or context here (optional)" rows="2"></textarea>
+  </div>
+
+  <!-- Category Multi-Select -->
+  <div>
+    <div class="section-label">Category</div>
+    <div class="dropdown-wrapper" id="categoryDropdown">
+      <button class="dropdown-trigger" id="categoryTrigger">
+        <span id="categoryDisplay">Select sizes...</span>
+        <span class="arrow">&#9660;</span>
+      </button>
+      <div class="dropdown-panel" id="categoryPanel"></div>
+    </div>
+  </div>
+
+  <!-- Frame Name -->
+  <div>
+    <div class="section-label">Frame Name</div>
+    <input type="text" id="frameNameInput" value="Amplitude — Generated" />
+  </div>
+
+  <!-- Design Brief -->
+  <div>
+    <div class="section-label">Design Brief</div>
+    <textarea id="designBrief" placeholder="Describe the illustration you want to generate...&#10;&#10;Example: Abstract product illustration showing a funnel visualization with colorful geometric shapes, gradient overlays, and data flow elements in Amplitude's brand style." rows="5" maxlength="2000"></textarea>
+    <div class="char-counter" id="briefCounter">0 / 2,000</div>
+  </div>
+
+  <!-- Advanced Settings -->
+  <div>
+    <div class="collapsible-header" id="advancedToggle">
+      <span class="chevron">&#9654;</span> Advanced Settings
+    </div>
+    <div class="collapsible-body" id="advancedBody">
+      <div class="section-label">System Prompt</div>
+      <textarea id="systemPromptInput" rows="10"></textarea>
+      <div class="input-hint">Customize the instructions sent to Gemini for SVG generation.</div>
+    </div>
+  </div>
+
+  <!-- Generate Button -->
+  <button class="btn btn-primary" id="generateBtn" disabled>
+    Generate Design
+  </button>
+
+  <!-- Status Area -->
+  <div class="status-area" id="statusArea">
+    <div class="status-msg" id="statusMsg"></div>
+    <div class="btn-row" id="statusActions" style="display: none;"></div>
+  </div>
+
+  <!-- Session History -->
+  <div>
+    <div class="collapsible-header" id="historyToggle">
+      <span class="chevron">&#9654;</span> Session History
+    </div>
+    <div class="collapsible-body" id="historyBody">
+      <div class="history-list" id="historyList">
+        <div class="empty-state" id="historyEmpty">No generations yet</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── State ──────────────────────────────────────────────────────
+var apiKey = '';
+var referenceImages = []; // { base64, mimeType, name, thumbnailUrl }
+var brandImages = [];     // { base64, mimeType, name, thumbnailUrl }
+var selectedCategories = [];
+var isGenerating = false;
+var sessionHistory = [];  // { categories, timestamp, status }
+var lastGenParams = null;
+
+var CATEGORIES = [
+  { name: 'Website Product Feature (4:3)', width: 1920, height: 1440 },
+  { name: 'Website Product Feature (16:9)', width: 1920, height: 1080 },
+  { name: 'Blog Standard (4:3)', width: 1920, height: 1440 },
+  { name: 'Blog Featured Image (16:9)', width: 1920, height: 1080 },
+  { name: 'Social Organic Square', width: 1080, height: 1080 },
+  { name: 'Stories', width: 1080, height: 1920 },
+  { name: 'Paid Social/Link Ads', width: 1200, height: 628 }
+];
+
+var DEFAULT_SYSTEM_PROMPT = 'You are an expert SVG illustration designer. Generate stylized, abstract product illustrations in a modern flat design style.\n\nRules:\n1. Output ONLY valid SVG markup. No markdown, no code fences, no explanations.\n2. Use the exact viewBox dimensions specified in the request.\n3. Use only these SVG elements: svg, g, defs, linearGradient, radialGradient, stop, path, rect, circle, ellipse, line, polyline, polygon, text, tspan.\n4. Apply all styles as inline attributes (fill, stroke, opacity, etc.). Do not use <style> blocks or CSS classes.\n5. Create visually rich illustrations with gradients, geometric shapes, and layered compositions.\n6. Fill the entire viewBox area with the illustration.\n7. Do not include <image>, <foreignObject>, <filter>, <mask>, or <clipPath> elements.\n8. Keep total path count under 200 for performance.\n9. Use a cohesive color palette that feels modern and professional.';
+
+// ── Init ───────────────────────────────────────────────────────
+document.getElementById('systemPromptInput').value = DEFAULT_SYSTEM_PROMPT;
+buildCategoryDropdown();
+attachEventListeners();
+
+function attachEventListeners() {
+  document.getElementById('apiKeyInput').addEventListener('input', function(e) {
+    apiKey = e.target.value.trim();
+    updateGenerateButton();
+  });
+
+  document.getElementById('designBrief').addEventListener('input', function(e) {
+    var len = e.target.value.length;
+    var counter = document.getElementById('briefCounter');
+    counter.textContent = len.toLocaleString() + ' / 2,000';
+    counter.className = len > 2000 ? 'char-counter over' : 'char-counter';
+    updateGenerateButton();
+  });
+
+  document.getElementById('refFileInput').addEventListener('change', function(e) {
+    handleFileUpload(e.target.files, 'reference');
+    e.target.value = '';
+  });
+
+  document.getElementById('brandFileInput').addEventListener('change', function(e) {
+    handleFileUpload(e.target.files, 'brand');
+    e.target.value = '';
+  });
+
+  document.getElementById('refUploadBtn').addEventListener('click', function() {
+    document.getElementById('refFileInput').click();
+  });
+
+  document.getElementById('refSelectionBtn').addEventListener('click', function() {
+    grabSelection();
+  });
+
+  document.getElementById('brandUploadBtn').addEventListener('click', function() {
+    document.getElementById('brandFileInput').click();
+  });
+
+  document.getElementById('categoryTrigger').addEventListener('click', function() {
+    toggleDropdown();
+  });
+
+  document.getElementById('advancedToggle').addEventListener('click', function() {
+    toggleAdvanced();
+  });
+
+  document.getElementById('historyToggle').addEventListener('click', function() {
+    toggleHistory();
+  });
+
+  document.getElementById('generateBtn').addEventListener('click', function() {
+    startGeneration();
+  });
+
+  // Close dropdown on outside click
+  document.addEventListener('click', function(e) {
+    var wrapper = document.getElementById('categoryDropdown');
+    if (!wrapper.contains(e.target)) {
+      closeDropdown();
+    }
+  });
+}
+
+// ── Category Dropdown ──────────────────────────────────────────
+function buildCategoryDropdown() {
+  var panel = document.getElementById('categoryPanel');
+  var html = '';
+  for (var i = 0; i < CATEGORIES.length; i++) {
+    var cat = CATEGORIES[i];
+    html += '<div class="dropdown-option" data-index="' + i + '">' +
+      '<input type="checkbox" id="cat-' + i + '" data-index="' + i + '" />' +
+      '<label for="cat-' + i + '">' + cat.name + '</label>' +
+      '<span class="size-dim">' + cat.width + '\u00d7' + cat.height + '</span>' +
+      '</div>';
+  }
+  panel.innerHTML = html;
+
+  // Attach click handlers to options
+  var options = panel.querySelectorAll('.dropdown-option');
+  for (var j = 0; j < options.length; j++) {
+    options[j].addEventListener('click', function(e) {
+      var idx = parseInt(this.getAttribute('data-index'));
+      toggleCategory(idx, e);
+    });
+  }
+}
+
+function toggleDropdown() {
+  var trigger = document.getElementById('categoryTrigger');
+  var panel = document.getElementById('categoryPanel');
+  var isOpen = panel.classList.contains('open');
+  if (isOpen) {
+    closeDropdown();
+  } else {
+    trigger.classList.add('open');
+    panel.classList.add('open');
+  }
+}
+
+function closeDropdown() {
+  document.getElementById('categoryTrigger').classList.remove('open');
+  document.getElementById('categoryPanel').classList.remove('open');
+}
+
+function toggleCategory(index, event) {
+  if (event) event.stopPropagation();
+  var checkbox = document.getElementById('cat-' + index);
+  checkbox.checked = !checkbox.checked;
+  updateSelectedCategories();
+}
+
+function updateSelectedCategories() {
+  selectedCategories = [];
+  for (var i = 0; i < CATEGORIES.length; i++) {
+    var checkbox = document.getElementById('cat-' + i);
+    if (checkbox && checkbox.checked) {
+      selectedCategories.push(CATEGORIES[i]);
+    }
+  }
+
+  var display = document.getElementById('categoryDisplay');
+  if (selectedCategories.length === 0) {
+    display.textContent = 'Select sizes...';
+  } else if (selectedCategories.length <= 2) {
+    display.textContent = selectedCategories.map(function(c) { return c.name; }).join(', ');
+  } else {
+    display.textContent = selectedCategories.length + ' sizes selected';
+  }
+  updateGenerateButton();
+}
+
+// ── File Upload ────────────────────────────────────────────────
+function handleFileUpload(files, target) {
+  var arr = target === 'reference' ? referenceImages : brandImages;
+  var maxCount = target === 'reference' ? 5 : 3;
+
+  for (var i = 0; i < files.length; i++) {
+    if (arr.length >= maxCount) break;
+    var file = files[i];
+    if (!file.type.match(/^image\/(png|jpeg|jpg)$/)) continue;
+
+    (function(f) {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        var dataUrl = e.target.result;
+        var rawBase64 = dataUrl.split(',')[1];
+
+        // Downscale for API payload, keep original for thumbnail
+        downscaleImage(rawBase64, f.type, function(result) {
+          arr.push({
+            base64: result.base64,
+            mimeType: result.mimeType,
+            name: f.name,
+            thumbnailUrl: dataUrl
+          });
+
+          renderThumbnails(target);
+        });
+      };
+      reader.readAsDataURL(f);
+    })(file);
+  }
+}
+
+function grabSelection() {
+  parent.postMessage({ pluginMessage: { type: 'get-selection' } }, '*');
+}
+
+// ── Thumbnail Rendering ───────────────────────────────────────
+function renderThumbnails(target) {
+  var arr = target === 'reference' ? referenceImages : brandImages;
+  var containerId = target === 'reference' ? 'refThumbs' : 'brandThumbs';
+  var emptyId = target === 'reference' ? 'refEmpty' : 'brandEmpty';
+  var countId = target === 'reference' ? 'refCount' : 'brandCount';
+
+  var container = document.getElementById(containerId);
+  var empty = document.getElementById(emptyId);
+  var countEl = document.getElementById(countId);
+
+  if (arr.length === 0) {
+    container.innerHTML = '';
+    empty.style.display = 'block';
+    countEl.textContent = '';
+  } else {
+    empty.style.display = 'none';
+    countEl.textContent = arr.length + ' loaded';
+    var html = '';
+    for (var i = 0; i < arr.length; i++) {
+      html += '<div class="thumb-item">' +
+        '<img src="' + arr[i].thumbnailUrl + '" alt="' + arr[i].name + '" />' +
+        '<button class="thumb-remove" data-target="' + target + '" data-index="' + i + '">\u00d7</button>' +
+        '</div>';
+    }
+    container.innerHTML = html;
+
+    // Attach remove handlers
+    var removeBtns = container.querySelectorAll('.thumb-remove');
+    for (var j = 0; j < removeBtns.length; j++) {
+      removeBtns[j].addEventListener('click', function() {
+        var t = this.getAttribute('data-target');
+        var idx = parseInt(this.getAttribute('data-index'));
+        removeImage(t, idx);
+      });
+    }
+  }
+}
+
+function removeImage(target, index) {
+  var arr = target === 'reference' ? referenceImages : brandImages;
+  if (arr[index].thumbnailUrl.indexOf('blob:') === 0) {
+    URL.revokeObjectURL(arr[index].thumbnailUrl);
+  }
+  arr.splice(index, 1);
+  renderThumbnails(target);
+}
+
+// ── Generate Button State ──────────────────────────────────────
+function updateGenerateButton() {
+  var btn = document.getElementById('generateBtn');
+  var brief = document.getElementById('designBrief').value.trim();
+  var canGenerate = apiKey.length > 0 && selectedCategories.length > 0 && brief.length > 0 && brief.length <= 2000 && !isGenerating;
+  btn.disabled = !canGenerate;
+}
+
+// ── Collapsible Toggles ────────────────────────────────────────
+function toggleAdvanced() {
+  var header = document.getElementById('advancedToggle');
+  var body = document.getElementById('advancedBody');
+  header.classList.toggle('open');
+  body.classList.toggle('open');
+}
+
+function toggleHistory() {
+  var header = document.getElementById('historyToggle');
+  var body = document.getElementById('historyBody');
+  header.classList.toggle('open');
+  body.classList.toggle('open');
+}
+
+// ── Byte array to base64 (chunked) ────────────────────────────
+function bytesToBase64(bytes) {
+  var chunkSize = 8192;
+  var binary = '';
+  for (var i = 0; i < bytes.length; i += chunkSize) {
+    var chunk = bytes.slice(i, i + chunkSize);
+    binary += String.fromCharCode.apply(null, chunk);
+  }
+  return btoa(binary);
+}
+
+// ── Downscale image for API payload ───────────────────────────
+// Takes a base64 image string, downscales to max 1024px on longest
+// side, re-encodes as JPEG at 0.7 quality (~100-300KB output).
+// Calls back with { base64, mimeType } — async due to Image.onload.
+function downscaleImage(base64, mimeType, callback) {
+  var MAX_DIM = 1024;
+  var img = new Image();
+  img.onload = function() {
+    var w = img.width;
+    var h = img.height;
+
+    // Only downscale if larger than MAX_DIM
+    if (w > MAX_DIM || h > MAX_DIM) {
+      var scale = MAX_DIM / Math.max(w, h);
+      w = Math.round(w * scale);
+      h = Math.round(h * scale);
+    }
+
+    var canvas = document.createElement('canvas');
+    canvas.width = w;
+    canvas.height = h;
+    var ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0, w, h);
+
+    var dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+    var newBase64 = dataUrl.split(',')[1];
+
+    callback({ base64: newBase64, mimeType: 'image/jpeg' });
+  };
+  img.onerror = function() {
+    // If downscaling fails, use original
+    callback({ base64: base64, mimeType: mimeType });
+  };
+  img.src = 'data:' + mimeType + ';base64,' + base64;
+}
+
+// ── Status Area ────────────────────────────────────────────────
+function showStatus(type, message, actions) {
+  var area = document.getElementById('statusArea');
+  var msg = document.getElementById('statusMsg');
+  var actionsEl = document.getElementById('statusActions');
+
+  area.className = 'status-area visible status-' + type;
+  msg.innerHTML = message;
+
+  if (actions) {
+    actionsEl.style.display = 'flex';
+    actionsEl.innerHTML = actions;
+
+    // Attach event listeners to dynamically created buttons
+    var retryBtn = actionsEl.querySelector('[data-action="retry"]');
+    var regenBtn = actionsEl.querySelector('[data-action="regenerate"]');
+    var newBtn = actionsEl.querySelector('[data-action="new"]');
+
+    if (retryBtn) {
+      retryBtn.addEventListener('click', function() {
+        var idx = parseInt(this.getAttribute('data-from'));
+        retryFrom(idx);
+      });
+    }
+    if (regenBtn) {
+      regenBtn.addEventListener('click', function() { regenerate(); });
+    }
+    if (newBtn) {
+      newBtn.addEventListener('click', function() { resetForNew(); });
+    }
+  } else {
+    actionsEl.style.display = 'none';
+    actionsEl.innerHTML = '';
+  }
+}
+
+function hideStatus() {
+  document.getElementById('statusArea').className = 'status-area';
+}
+
+// ── Gemini API Call ────────────────────────────────────────────
+function callGemini(systemPrompt, parts) {
+  var endpoint = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' + apiKey;
+
+  var body = {
+    system_instruction: {
+      parts: [{ text: systemPrompt }]
+    },
+    contents: [{
+      parts: parts
+    }],
+    generationConfig: {
+      temperature: 0.8,
+      maxOutputTokens: 65536
+    }
+  };
+
+  return fetch(endpoint, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  }).then(function(response) {
+    if (!response.ok) {
+      var status = response.status;
+      // Read the actual error body from Google — it contains the real reason
+      return response.json().catch(function() {
+        return { error: { message: response.statusText } };
+      }).then(function(errData) {
+        var googleMsg = (errData.error && errData.error.message) ? errData.error.message : response.statusText;
+        if (status === 401 || status === 403) throw new Error('Invalid API key: ' + googleMsg);
+        if (status === 429) throw new Error('Rate limited: ' + googleMsg);
+        if (status >= 500) throw new Error('Gemini service error: ' + googleMsg);
+        throw new Error('API error (' + status + '): ' + googleMsg);
+      });
+    }
+    return response.json();
+  }).then(function(data) {
+    if (!data.candidates || !data.candidates[0] || !data.candidates[0].content) {
+      throw new Error('Empty response from Gemini. Try a different design brief.');
+    }
+
+    // Gemini 2.5 Flash uses "thinking" — response may have multiple parts.
+    // The thinking part has { "thought": true }, the actual output is in a
+    // later part. Concatenate all non-thought text parts to find the SVG.
+    var allParts = data.candidates[0].content.parts || [];
+    var text = '';
+    for (var p = 0; p < allParts.length; p++) {
+      if (allParts[p].text && !allParts[p].thought) {
+        text += allParts[p].text;
+      }
+    }
+
+    // If no non-thought text found, fall back to concatenating everything
+    if (!text) {
+      for (var q = 0; q < allParts.length; q++) {
+        if (allParts[q].text) {
+          text += allParts[q].text;
+        }
+      }
+    }
+
+    // Extract SVG from response (may be wrapped in markdown fencing)
+    var svgMatch = text.match(/<svg[\s\S]*?<\/svg>/);
+    if (!svgMatch) {
+      // Log a snippet of what we got for debugging
+      var preview = text.substring(0, 300);
+      throw new Error('No valid SVG found in model response. Preview: ' + preview);
+    }
+
+    return svgMatch[0];
+  });
+}
+
+// ── Place SVG via sandbox (returns a promise) ──────────────────
+function placeSvg(svg, width, height, name, index, total) {
+  return new Promise(function(resolve, reject) {
+    var handler = function(event) {
+      var msg = event.data.pluginMessage;
+      if (!msg) return;
+
+      if (msg.type === 'svg-placed' && msg.index === index) {
+        window.removeEventListener('message', handler);
+        resolve();
+      } else if (msg.type === 'svg-error' && msg.index === index) {
+        window.removeEventListener('message', handler);
+        reject(new Error(msg.error));
+      }
+    };
+    window.addEventListener('message', handler);
+
+    parent.postMessage({
+      pluginMessage: {
+        type: 'place-svg',
+        svg: svg,
+        width: width,
+        height: height,
+        name: name,
+        index: index,
+        total: total
+      }
+    }, '*');
+  });
+}
+
+// ── Build prompt parts for a category ──────────────────────────
+function buildParts(brief, brandNotes, cat) {
+  var parts = [];
+
+  // Reference images
+  for (var i = 0; i < referenceImages.length; i++) {
+    parts.push({
+      inline_data: { mime_type: referenceImages[i].mimeType, data: referenceImages[i].base64 }
+    });
+  }
+
+  // Brand images
+  for (var j = 0; j < brandImages.length; j++) {
+    parts.push({
+      inline_data: { mime_type: brandImages[j].mimeType, data: brandImages[j].base64 }
+    });
+  }
+
+  // Text prompt
+  var textPrompt = '';
+  if (brandNotes) {
+    textPrompt += 'Brand Context:\n' + brandNotes + '\n\n';
+  }
+  if (referenceImages.length > 0) {
+    textPrompt += 'I\'ve provided ' + referenceImages.length + ' reference design(s) above. Use them as visual inspiration for style, composition, and layout.\n\n';
+  }
+  if (brandImages.length > 0) {
+    textPrompt += 'I\'ve provided ' + brandImages.length + ' brand guideline image(s) above. Match the brand colors, typography style, and visual identity shown.\n\n';
+  }
+  textPrompt += 'Design Brief:\n' + brief + '\n\n';
+  textPrompt += 'Target Dimensions: ' + cat.width + '\u00d7' + cat.height + ' (' + cat.name + ')\n\n';
+  textPrompt += 'Generate a complete, valid SVG with viewBox="0 0 ' + cat.width + ' ' + cat.height + '". Output ONLY the SVG markup.';
+
+  parts.push({ text: textPrompt });
+  return parts;
+}
+
+// ── Generation Flow ────────────────────────────────────────────
+function startGeneration() {
+  if (isGenerating) return;
+  isGenerating = true;
+  updateGenerateButton();
+
+  var brief = document.getElementById('designBrief').value.trim();
+  var brandNotes = document.getElementById('brandNotes').value.trim();
+  var frameName = document.getElementById('frameNameInput').value.trim() || 'Amplitude \u2014 Generated';
+  var systemPrompt = document.getElementById('systemPromptInput').value.trim() || DEFAULT_SYSTEM_PROMPT;
+  var categories = selectedCategories.slice();
+
+  lastGenParams = { brief: brief, brandNotes: brandNotes, frameName: frameName, systemPrompt: systemPrompt, categories: categories };
+
+  var total = categories.length;
+
+  showStatus('generating', '<span class="spinner"></span> Preparing generation (' + total + ' size' + (total > 1 ? 's' : '') + ')...');
+
+  generateSequential(categories, 0, total, brief, brandNotes, frameName, systemPrompt, 0);
+}
+
+function generateSequential(categories, index, total, brief, brandNotes, frameName, systemPrompt, successCount) {
+  if (index >= categories.length) {
+    // All done
+    showStatus('success', 'Generated ' + successCount + ' illustration' + (successCount > 1 ? 's' : '') + ' successfully.',
+      '<button class="btn btn-sm" data-action="regenerate">Regenerate</button>' +
+      '<button class="btn btn-sm" data-action="new">New Design</button>'
+    );
+    addHistoryEntry(categories.map(function(c) { return c.name; }).join(', '), 'success');
+    isGenerating = false;
+    updateGenerateButton();
+    return;
+  }
+
+  var cat = categories[index];
+  showStatus('generating', '<span class="spinner"></span> Generating design ' + (index + 1) + ' of ' + total + ' \u2014 ' + cat.name + '...');
+
+  var parts = buildParts(brief, brandNotes, cat);
+
+  callGemini(systemPrompt, parts).then(function(svg) {
+    showStatus('generating', '<span class="spinner"></span> Placing on canvas (' + (index + 1) + ' of ' + total + ')...');
+
+    return placeSvg(svg, cat.width, cat.height, frameName + ' \u2014 ' + cat.name, index, total);
+  }).then(function() {
+    generateSequential(categories, index + 1, total, brief, brandNotes, frameName, systemPrompt, successCount + 1);
+  }).catch(function(err) {
+    var errorMsg = err.message || 'Unknown error during generation';
+    showStatus('error', 'Error on "' + cat.name + '": ' + errorMsg,
+      '<button class="btn btn-sm" data-action="retry" data-from="' + index + '">Retry</button>' +
+      '<button class="btn btn-sm" data-action="new">New Design</button>'
+    );
+    addHistoryEntry(categories.map(function(c) { return c.name; }).join(', '), 'failed');
+    isGenerating = false;
+    updateGenerateButton();
+  });
+}
+
+// ── Retry from failed category ─────────────────────────────────
+function retryFrom(fromIndex) {
+  if (!lastGenParams || isGenerating) return;
+  isGenerating = true;
+  updateGenerateButton();
+
+  var p = lastGenParams;
+  var total = p.categories.length;
+
+  generateSequential(p.categories, fromIndex, total, p.brief, p.brandNotes, p.frameName, p.systemPrompt, 0);
+}
+
+// ── Regenerate with same params ────────────────────────────────
+function regenerate() {
+  if (!lastGenParams || isGenerating) return;
+  startGeneration();
+}
+
+// ── Reset for new design ───────────────────────────────────────
+function resetForNew() {
+  document.getElementById('designBrief').value = '';
+  document.getElementById('briefCounter').textContent = '0 / 2,000';
+  document.getElementById('frameNameInput').value = 'Amplitude \u2014 Generated';
+  hideStatus();
+  updateGenerateButton();
+}
+
+// ── Session History ────────────────────────────────────────────
+function addHistoryEntry(categories, status) {
+  var now = new Date();
+  var timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+  sessionHistory.unshift({ categories: categories, timestamp: timeStr, status: status });
+
+  if (sessionHistory.length > 20) sessionHistory.pop();
+
+  renderHistory();
+}
+
+function renderHistory() {
+  var list = document.getElementById('historyList');
+  var empty = document.getElementById('historyEmpty');
+
+  if (sessionHistory.length === 0) {
+    if (empty) empty.style.display = 'block';
+    return;
+  }
+
+  var html = '';
+  for (var i = 0; i < sessionHistory.length; i++) {
+    var h = sessionHistory[i];
+    var statusClass = h.status === 'success' ? 'history-status-ok' : 'history-status-fail';
+    var statusIcon = h.status === 'success' ? '\u2713' : '\u2717';
+    html += '<div class="history-item">' +
+      '<span class="hi-name">' + h.categories + '</span>' +
+      '<span class="hi-time">' + h.timestamp + '</span>' +
+      '<span class="' + statusClass + '">' + statusIcon + '</span>' +
+      '</div>';
+  }
+  list.innerHTML = html;
+}
+
+// ── Message Handler (from Figma sandbox) ───────────────────────
+window.onmessage = function(event) {
+  var msg = event.data.pluginMessage;
+  if (!msg) return;
+
+  switch (msg.type) {
+    case 'selection-result': {
+      var maxRemaining = 5 - referenceImages.length;
+      var images = msg.images.slice(0, maxRemaining);
+      var pending = images.length;
+
+      if (pending === 0) break;
+
+      for (var i = 0; i < images.length; i++) {
+        (function(img) {
+          var rawBase64 = bytesToBase64(img.bytes);
+          var blob = new Blob(
+            [new Uint8Array(img.bytes)],
+            { type: 'image/png' }
+          );
+          var thumbnailUrl = URL.createObjectURL(blob);
+
+          // Downscale for API payload, keep full-res blob URL for thumbnail
+          downscaleImage(rawBase64, 'image/png', function(result) {
+            referenceImages.push({
+              base64: result.base64,
+              mimeType: result.mimeType,
+              name: img.name,
+              thumbnailUrl: thumbnailUrl
+            });
+
+            pending--;
+            if (pending === 0) {
+              renderThumbnails('reference');
+            }
+          });
+        })(images[i]);
+      }
+      break;
+    }
+
+    case 'selection-error': {
+      showStatus('error', msg.error);
+      setTimeout(hideStatus, 4000);
+      break;
+    }
+  }
+};
+</script>
+
+</body>
+</html>
